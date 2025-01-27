@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Karaoke</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom, #6a11cb, #2575fc);
+            color: white;
+        }
+
+        button {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            background-color: #ffffff;
+            color: #2575fc;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Solo Karaoke</h1>
+    <p>Click the button below to hear your voice in real-time.</p>
+    <button id="startButton">Start Karaoke</button>
+    <script>
+        const startButton = document.getElementById('startButton');
+
+        startButton.addEventListener('click', async () => {
+            try {
+                // Request access to microphone
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+                // Create an audio context
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                // Create a source node from the microphone stream
+                const source = audioContext.createMediaStreamSource(stream);
+
+                // Connect the source to the destination (speakers)
+                source.connect(audioContext.destination);
+
+                startButton.textContent = "Karaoke is live! Speak into your mic.";
+                startButton.disabled = true;
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                alert('Could not access your microphone. Please check your permissions and try again.');
+            }
+        });
+    </script>
+</body>
+</html>
